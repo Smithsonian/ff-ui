@@ -44,6 +44,8 @@ export default class Notification extends CustomElement
         new Notification(message, level, timeout);
     }
 
+    public static shadowRootNode: ShadowRoot = null;
+
     @property({ type: String })
     message: string;
 
@@ -65,7 +67,9 @@ export default class Notification extends CustomElement
         this.level = level || "info";
         this.timeout = timeout !== undefined ? timeout : _levelTimeouts[this.level];
 
-        const stack = document.getElementById(Notification.stackId);
+        const root = Notification.shadowRootNode || document;
+
+        const stack = root.getElementById(Notification.stackId);
         if (stack) {
             stack.appendChild(this);
         }
