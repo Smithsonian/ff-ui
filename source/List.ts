@@ -5,6 +5,7 @@
  * License: MIT
  */
 
+import { Dictionary } from "@ff/core/types";
 import uniqueId from "@ff/core/uniqueId";
 import CustomElement, { customElement, property, html, repeat, TemplateResult } from "./CustomElement";
 
@@ -12,8 +13,15 @@ import CustomElement, { customElement, property, html, repeat, TemplateResult } 
 
 export { customElement, property, html, TemplateResult };
 
+export interface IListNode extends Dictionary<any>
+{
+    id?: string;
+    selected?: boolean;
+    expanded?: boolean;
+}
+
 @customElement("ff-list")
-export default class List<T extends any = any> extends CustomElement
+export default class List<T extends IListNode = IListNode> extends CustomElement
 {
     @property({ attribute: false })
     data: Readonly<T[]> = null;

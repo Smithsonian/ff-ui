@@ -14,14 +14,16 @@ import CustomElement, { customElement, property, html, PropertyValues, TemplateR
 
 export { customElement, property, html, PropertyValues, TemplateResult };
 
-export interface ITreeNode
+export interface ITreeNode extends Dictionary<any>
 {
-    id: string;
-    children: ITreeNode[];
+    id?: string;
+    children?: ITreeNode[];
+    selected?: boolean;
+    expanded?: boolean;
 }
 
 @customElement("ff-tree")
-export default class Tree<T extends any = any> extends CustomElement
+export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
 {
     static readonly dragDropMimeType: string = "application/x-ff-tree-node";
 
