@@ -70,7 +70,8 @@ export default class LineEdit extends CustomElement
 
     hasFocus()
     {
-        return this.inputElement === document.activeElement;
+        const activeElement = document.activeElement.shadowRoot ? document.activeElement.shadowRoot.activeElement : document.activeElement;
+        return this.inputElement === activeElement;
     }
 
     protected firstConnected()

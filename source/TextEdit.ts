@@ -73,7 +73,8 @@ export default class TextEdit extends CustomElement
 
     hasFocus()
     {
-        return this.textArea === document.activeElement;
+        const activeElement = document.activeElement.shadowRoot ? document.activeElement.shadowRoot.activeElement : document.activeElement;
+        return this.textArea === activeElement;
     }
 
     protected firstConnected()

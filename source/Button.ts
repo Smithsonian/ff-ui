@@ -46,6 +46,9 @@ export default class Button extends CustomElement
     @property({ type: Number })
     selectedIndex = -1;
 
+    @property({ type: Number })
+    tabbingIndex = 0;
+
     /** If true, adds "ff-selected" class to element. */
     @property({ type: Boolean, reflect: true })
     selected = false;
@@ -64,6 +67,10 @@ export default class Button extends CustomElement
     /** Optional name of the icon to be displayed on the button. */
     @property()
     icon = "";
+
+    /** Optional role - defaults to 'button'. */
+    @property()
+    role = "button";
 
     /** If true, displays a downward facing triangle at the right side. */
     @property({ type: Boolean })
@@ -85,7 +92,8 @@ export default class Button extends CustomElement
 
     protected firstConnected()
     {
-        this.tabIndex = 0;
+        this.tabIndex = this.tabbingIndex;
+        this.setAttribute("role", this.role);
         this.classList.add("ff-button");
     }
 
@@ -150,7 +158,10 @@ export default class Button extends CustomElement
 
     protected onKeyDown(event: KeyboardEvent)
     {
-        if (document.activeElement === this && (event.code === "Space" || event.code === "Enter")) {
+        const activeElement = document.activeElement.shadowRoot ? document.activeElement.shadowRoot.activeElement : document.activeElement;
+        
+        if (activeElement === this && (event.code === "Space" || event.code === "Enter")) {
+            event.preventDefault();
             this.dispatchEvent(new MouseEvent("click", { bubbles: true }));
         }
     }
