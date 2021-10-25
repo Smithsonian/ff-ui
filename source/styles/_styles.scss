@@ -210,6 +210,15 @@ button, input {
   outline-offset: 0;
 }
 
+*:focus:not(:focus-visible) {
+  outline: 0;
+}
+
+*:focus-visible {
+  outline: 1px solid $color-primary;
+  outline-offset: 0;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // SEMANTIC ELEMENTS
 
