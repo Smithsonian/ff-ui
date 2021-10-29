@@ -109,7 +109,7 @@ export default class ColorEdit extends CustomElement
         }
 
 
-        return html`<div class="ff-flex-row ff-slider-controls">
+        return html`<div class="ff-flex-row ff-slider-controls" role="application" @keydown=${this.onKeyDown}>
                 ${this._lumSatSlider}${this._hueSlider}${this._alphaSlider}
             </div>${numericControls}`;
     }
@@ -186,6 +186,46 @@ export default class ColorEdit extends CustomElement
         this.color.toHSV(this._hsv);
         this.requestUpdate();
         this.emitChangeEvent(event.detail.isEditing);
+    }
+
+    protected onKeyDown(event: KeyboardEvent)
+    {
+        const isSmallStepUp = event.code === "ArrowRight" || event.code === "ArrowUp";
+        const isLargeStepUp = event.code === "PageUp";
+        const isSmallStepDown = event.code === "ArrowLeft" || event.code === "ArrowDown";
+        const isLargeStepDown = event.code === "PageDown";
+        const shouldStep = isSmallStepUp || isLargeStepUp || isSmallStepDown || isLargeStepDown;
+
+        if(shouldStep) {
+            if(event.target === this._hueSlider || event.target === this._alphaSlider) {
+                const dir = (isSmallStepUp || isLargeStepUp) ? -1 : 1;
+                const step = (isSmallStepUp || isSmallStepDown) ? 0.01 : 0.1;
+                if(event.target === this._hueSlider) {
+                    this._hsv.x = math.limit(this._hsv.x + step*360*dir, 0, 360);
+                    this.color.setHSV(this._hsv);
+                }
+                else {
+                    this.color.alpha = math.limit(this.color.alpha + step*dir, 0, 1);
+                }
+                this.requestUpdate();
+                this.emitChangeEvent(false);
+            }
+            else if(event.target === this._lumSatSlider) {
+                if(isSmallStepUp || isSmallStepDown) {
+                    const dir = isSmallStepUp ? 1 : -1;
+                    const step = event.shiftKey ? 0.1 : 0.01;
+                    if(event.code === "ArrowRight" || event.code === "ArrowLeft") {
+                        this._hsv.y = math.limit(this._hsv.y + step*dir, 0, 1);
+                    }
+                    else {
+                        this._hsv.z = math.limit(this._hsv.z + step*dir, 0, 1);
+                    }
+                    this.color.setHSV(this._hsv);
+                    this.requestUpdate();
+                    this.emitChangeEvent(false);
+                }
+            }
+        }
     }
 
     protected emitChangeEvent(isDragging: boolean)
