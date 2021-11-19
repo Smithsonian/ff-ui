@@ -44,6 +44,9 @@ export default class TextEdit extends CustomElement
     @property({ type: String })
     placeholder = "";
 
+    @property({ type: Boolean })
+    readonly = false;
+
     @property({ type: String })
     align: TextAlign = "left";
 
@@ -97,8 +100,8 @@ export default class TextEdit extends CustomElement
         return html`<textarea
             .value=${this.text} placeholder=${this.placeholder}
             @keydown=${this.onKeyDown} @change=${this.onChange} @input=${this.onInput}
-            @focus=${this.onFocus} @blur=${this.onBlur}
-            style="text-align: ${this.align};"></textarea>`;
+            @focus=${this.onFocus} @blur=${this.onBlur} 
+            style="text-align: ${this.align};" ?readonly=${this.readonly}></textarea>`;
     }
 
     protected onKeyDown(event: KeyboardEvent)
