@@ -98,7 +98,7 @@ export default class TextEdit extends CustomElement
     protected render()
     {
         return html`<textarea
-            .value=${this.text} placeholder=${this.placeholder}
+            .value=${this.text} placeholder=${this.placeholder} aria-labelledby=${this.getAttribute("aria-labelledby") ?? ''}
             @keydown=${this.onKeyDown} @change=${this.onChange} @input=${this.onInput}
             @focus=${this.onFocus} @blur=${this.onBlur} 
             style="text-align: ${this.align};" ?readonly=${this.readonly}></textarea>`;
