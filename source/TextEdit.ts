@@ -6,6 +6,7 @@
  */
 
 import CustomElement, { customElement, property, html, PropertyValues } from "./CustomElement";
+import {ifDefined} from 'lit-html/directives/if-defined';
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -49,6 +50,10 @@ export default class TextEdit extends CustomElement
 
     @property({ type: String })
     align: TextAlign = "left";
+
+    /** Max number of characters allowed in the box. 0 == unlimited. */
+    @property({ type: Number })
+    maxLength = 0;
 
     protected initialValue: string = "";
 
@@ -101,7 +106,7 @@ export default class TextEdit extends CustomElement
             .value=${this.text} placeholder=${this.placeholder} aria-labelledby=${this.getAttribute("aria-labelledby") ?? ''}
             @keydown=${this.onKeyDown} @change=${this.onChange} @input=${this.onInput}
             @focus=${this.onFocus} @blur=${this.onBlur} 
-            style="text-align: ${this.align};" ?readonly=${this.readonly}></textarea>`;
+            style="text-align: ${this.align};" ?readonly=${this.readonly} maxlength=${ifDefined(this.maxLength > 0 ? this.maxLength : undefined)}}></textarea>`;
     }
 
     protected onKeyDown(event: KeyboardEvent)
