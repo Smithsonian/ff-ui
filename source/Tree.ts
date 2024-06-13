@@ -228,7 +228,7 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
         return html`
             <div class="ff-tree-node-container">
                 <div class=${classes} id=${id} ?selected=${selected} ?expanded=${expanded}>
-                    <div class="ff-header" draggable="true"
+                    <div class="ff-header" .draggable=$this.draggagle}
                         @click=${this.onClick} @dblclick=${this.onDblClick}>${header}</div>
                     <div class="ff-content">${content}</div>
                 </div>
